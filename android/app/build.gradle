@@ -99,7 +99,7 @@ android {
 
     defaultConfig {
         applicationId "com.sagitta"
-        minSdkVersion 16
+        minSdkVersion 18
         targetSdkVersion 22
         versionCode 1
         versionName "1.0"
@@ -138,6 +138,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-ble-manager')
     compile project(':react-native-vector-icons')
     compile(project(':react-native-maps')){
        exclude group: 'com.google.android.gms', module: 'play-services-base'
