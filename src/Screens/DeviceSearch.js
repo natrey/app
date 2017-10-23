@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 import HeaderButton from '../Components/HeaderButton';
 
-export default class Settings extends Component {
+export default class DeviceSearch extends Component {
     
     render() {
         const { navigate } = this.props.navigation;        
@@ -15,7 +15,7 @@ export default class Settings extends Component {
             <View style={styles.container}>
                 <HeaderButton onPress={() => navigate('DrawerOpen')} />
                 <Text style={styles.header}>
-                    Settings Tab
+                    Device Search
                 </Text>
                 <View style={styles.button}> 
                     <Button
@@ -44,6 +44,7 @@ const styles = StyleSheet.create({
     header: {
         fontSize: 20,
         marginVertical: 20,
+        color: '#000'
     },
     button: {
         marginBottom: 20

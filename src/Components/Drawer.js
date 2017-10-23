@@ -42,6 +42,7 @@ const styles = StyleSheet.create({
     header: {
         fontSize: 20,
         marginVertical: 20,
+        color: '#000'
     },
     button: {
         marginBottom: 20

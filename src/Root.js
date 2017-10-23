@@ -1,20 +1,25 @@
 import React from 'react';
 import {
     DrawerNavigator,
-    StackNavigator,
-    TabNavigator
+    StackNavigator
 } from 'react-navigation';
-import Icon from 'react-native-vector-icons/Ionicons';
-import Home from './Tabs/Home';
-import Settings from './Tabs/Settings';
+import getSlideFromRightTransition from 'react-navigation-slide-from-right-transition';
+import Home from './Screens/Home';
+import DeviceSearch from './Screens/DeviceSearch';
 import Profile from './Screens/Profile';
 import Modal from './Screens/Modal';
 import Drawer from './Components/Drawer';
 
-// Stack navigation for Settings and Profile screens
-const SettingsTab = StackNavigator({
-    Settings: {
-        screen: Settings,
+// Stack navigation for main screens
+const AppNavigation = StackNavigator({
+    Home: {
+        screen: Home,
+        navigationOptions: {
+            header: null
+        },
+    },
+    DeviceSearch: {
+        screen: DeviceSearch,
         navigationOptions: {
             header: null,
             headerBackTitle: 'Back',
@@ -28,54 +33,24 @@ const SettingsTab = StackNavigator({
     },
 }, {
     headerMode: 'screen',
+    transitionConfig: getSlideFromRightTransition
 });
 
-// Tab navigation for Home and Settings screens
-const TabNavigation = TabNavigator({
+// Wrap stack navigation into drawer navigation
+const StackWithDrawerNavigation = DrawerNavigator({
     Home: {
-        screen: Home,
-        navigationOptions: {
-            tabBarLabel: 'Home',
-            tabBarIcon: ({ tintColor, focused }) => <Icon
-                name={focused ? 'ios-home' : 'ios-home-outline'}
-                size={26}
-                style={{ color: tintColor }}
-            />
-        },
-    },
-    Settings: {
-        screen: SettingsTab,
-        navigationOptions: {
-            tabBarLabel: 'Settings',
-            tabBarIcon: ({ tintColor, focused }) => <Icon
-                name={focused ? 'ios-settings' : 'ios-settings-outline'}
-                size={26}
-                style={{ color: tintColor }}
-            />
-        },
-    },
-}, {
-    tabBarPosition: 'bottom',
-    tabBarOptions: {
-        showIcon: true
-    }
-});
-
-// Wrap tab navigation into drawer navigation
-const TabsWithDrawerNavigation = DrawerNavigator({
-    Tabs: {
-        screen: TabNavigation,
+        screen: AppNavigation,
     }
 }, {
     // Register custom drawer component
     contentComponent: props => <Drawer {...props} />
 });
 
-// Stack together drawer with tabs and modal navigation
+// Stack together drawer with stack cards and modal navigation
 // to call Modal screen from any other screen
 const Root = StackNavigator({
-    TabsWithDrawer: {
-        screen: TabsWithDrawerNavigation,
+    StackWithDrawer: {
+        screen: StackWithDrawerNavigation,
     },
     Modal: {
         screen: Modal

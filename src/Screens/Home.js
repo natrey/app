@@ -44,7 +44,7 @@ class Home extends Component {
                 <View style={styles.buttonBottom}>
                     <Button 
                         title="Go!"
-                        onPress={() => navigate('Modal')}
+                        onPress={() => navigate('DeviceSearch')}
                     />
                 </View>
                 
