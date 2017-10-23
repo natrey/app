@@ -6,6 +6,7 @@ import {
     View
 } from 'react-native';
 import HeaderButton from '../Components/HeaderButton';
+import BluetoothComponent from '../Components/BluetoothComponent';
 
 export default class DeviceSearch extends Component {
     
@@ -17,6 +18,9 @@ export default class DeviceSearch extends Component {
                 <Text style={styles.header}>
                     Device Search
                 </Text>
+                
+                <BluetoothComponent/>
+                
                 <View style={styles.button}> 
                     <Button
                         onPress={() => navigate('Profile', { user: 'User' })}

@@ -37,7 +37,6 @@ export default class Geolocation extends Component {
     
     componentDidMount() {
         this.loadGeolocation();
-        console.log('component mounted!');
     }
 
     render() {
