@@ -6,6 +6,7 @@ import {
 import getSlideFromRightTransition from 'react-navigation-slide-from-right-transition';
 import Home from './Screens/Home';
 import DeviceSearch from './Screens/DeviceSearch';
+import WifiDeviceSearch from './Screens/WifiDeviceSearch';
 import Profile from './Screens/Profile';
 import Modal from './Screens/Modal';
 import Drawer from './Components/Drawer';
@@ -22,6 +23,12 @@ const AppNavigation = StackNavigator({
         screen: DeviceSearch,
         navigationOptions: {
             title: 'Device search'
+        },
+    },
+    WifiDeviceSearch: {
+        screen: WifiDeviceSearch,
+        navigationOptions: {
+            title: 'Wifi Device search'
         },
     },
     Profile: {

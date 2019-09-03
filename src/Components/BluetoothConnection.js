@@ -15,7 +15,6 @@ import PropTypes from 'prop-types';
 import {GoogleSignin, GoogleSigninButton} from 'react-native-google-signin';
 
 class BluetoothConnection extends Component {
-    
     constructor (props) {
         super(props);
         this.state = {
@@ -43,13 +42,13 @@ class BluetoothConnection extends Component {
         this.switchDeviceOff = this.switchDeviceOff.bind(this);
         this.sendResults = this.sendResults.bind(this);
     }
-    
+
     componentDidMount() {
         GoogleSignin.configure({
             webClientId: '382472343452-g7l6cmjppb4eol70c7bdtspihffnm7f9.apps.googleusercontent.com',
             offlineAccess: false
         });
-        
+
         Promise.all([
             BluetoothSerial.isEnabled(),
             BluetoothSerial.list()
@@ -57,7 +56,7 @@ class BluetoothConnection extends Component {
             const [ isEnabled, devices ] = values;
             this.setState({ isEnabled, devices })
         });
-        
+
         BluetoothSerial.on('bluetoothEnabled', () => Toast.showShortBottom('Bluetooth enabled'));
         BluetoothSerial.on('bluetoothDisabled', () => Toast.showShortBottom('Bluetooth disabled'));
         BluetoothSerial.on('error', (err) => console.log(`Error: ${err.message}`));
@@ -78,7 +77,7 @@ class BluetoothConnection extends Component {
                 const lng = this.state.lng;
                 if (typeof data.data === 'string'){
                     let dataTrimmed =  data.data.replace(/(\r\n|\n|\r)/gm,"");
-                    if (dataTrimmed === 'success'){                        
+                    if (dataTrimmed === 'success'){
                         this.setState({deviceReady: true}, ()=>{
                             const coord = `coord ${lat},${lng}\r\n`;
                             this.write(coord);
@@ -93,19 +92,19 @@ class BluetoothConnection extends Component {
                             this.write(message);
                         });
                     }
-                    if (dataTrimmed === '_start_file'){                        
+                    if (dataTrimmed === '_start_file'){
                     }
-                    if (dataTrimmed === '_end_file'){                        
+                    if (dataTrimmed === '_end_file'){
                         this.setState({measureResults: true});
                     }
                     dataArray.push(dataTrimmed);
-                }                 
+                }
                 this.setState({dataFromDevice: dataArray});
             })
         });
     }
-    
-    
+
+
     /**
      * [android]
      * enable bluetooth on device
@@ -117,11 +116,11 @@ class BluetoothConnection extends Component {
             })
             .catch((err) => Toast.showShortBottom(err.message))
     }
-    
+
     /**
      * [android]
      * Discover unpaired devices, works only in android
-     */        
+     */
     startDiscovery() {
         this.enableBluetooth()
             .then((res) => {
@@ -131,10 +130,10 @@ class BluetoothConnection extends Component {
                     this.setState({ discovering: true });
                     BluetoothSerial.discoverUnpairedDevices()
                         .then((unpairedDevices) => {
-                            this.setState({ unpairedDevices, discovering: false });                            
+                            this.setState({ unpairedDevices, discovering: false });
                         })
                         .catch((err) => console.log(err.message))
-                }    
+                }
             })
     }
 
@@ -183,12 +182,12 @@ class BluetoothConnection extends Component {
                 this.setState({ device, connected: true, connecting: false }, () => {
                     console.log(this.state);
                 });
-                let currentDate = moment().format('DDMMYYYYHHmm');                
+                let currentDate = moment().format('DDMMYYYYHHmm');
                 console.log(currentDate);
                 this.setState({currentDate: currentDate}, () => {
                     const message = `filename ${currentDate}.csv\r\n`;
                     this.write(message);
-                });        
+                });
             })
             .catch((err) => Toast.showShortBottom(err.message))
     }
@@ -203,37 +202,37 @@ class BluetoothConnection extends Component {
                 Toast.showShortBottom(`Connected to device ${device.name}`);
                 this.setState({ device, connected: true, connecting: false }, () => {
                     console.log(this.state);
-                });                  
+                });
             })
             .catch((err) => Toast.showShortBottom(err.message))
     }
-    
+
     /**
      * Start measuring
      * @param {String} message
      */
-    write(message) {        
+    write(message) {
         if (!this.state.connected) {
             Toast.showShortBottom('You must connect to device first')
         } else {
             BluetoothSerial.write(message)
                 .then((res) => {
-                    // Toast.showShortBottom('Successfully wrote to device');                    
+                    // Toast.showShortBottom('Successfully wrote to device');
                 })
                 .catch((err) => Toast.showShortBottom(err.message))
-        }        
+        }
     }
-    switchDeviceOn = () => {        
+    switchDeviceOn = () => {
         this.write('mode 1\r\n');
     }
     switchDeviceOff = () => {
         let device = this;
-        function sendMessage(){            
+        function sendMessage(){
             if (device.state.deviceOn){
                 device.write('mode 0\r\n');
                 setTimeout(sendMessage, 1000);
-            }            
-        }        
+            }
+        }
         sendMessage();
     }
     sendResults = () => {
@@ -241,7 +240,7 @@ class BluetoothConnection extends Component {
         let startIndex = this.state.dataFromDevice.indexOf('_start_file') + 1;
         let endIndex = this.state.dataFromDevice.indexOf('_end_file');
         let results = this.state.dataFromDevice.slice(startIndex, endIndex);
-        let resultsObj = results.map((result) => {            
+        let resultsObj = results.map((result) => {
             result = result.split(';');
             let obj = {};
             obj.milliseconds = parseFloat(result[0]);
@@ -266,7 +265,7 @@ class BluetoothConnection extends Component {
                             'Content-Type': 'application/json'
                         },
                         body: JSON.stringify({"access_token": this.state.user.accessToken})
-                        
+
                     }).then(res=>res.json())
                     .then(res => {
                         console.log(res);
@@ -300,10 +299,9 @@ class BluetoothConnection extends Component {
             .catch((err) => {
                 console.log('WRONG SIGNIN', err);
             })
-            .done();        
+            .done();
     }
     render() {
-        // console.log(this.state);
         return (
             <View style={styles.container}>
                 <ScrollView>
@@ -326,15 +324,15 @@ class BluetoothConnection extends Component {
                                             <View>
                                                 <Text style={styles.devicesName}>{device.name}</Text>
                                                 <Text style={styles.devicesId}>{`<${device.id}>`}</Text>
-                                            </View>                                        
+                                            </View>
                                             <Button
                                                 title='Pair'
                                                 onPress={this.pairDevice.bind(this, device)} />
                                         </View>
                                     )
-                                }) 
+                                })
                             ) : null
-                        }                    
+                        }
                     </View>
                     <View>
                         {
@@ -356,32 +354,32 @@ class BluetoothConnection extends Component {
                                                     onPress={this.reconnectDevice.bind(this, device)} /> : <Button
                                                     title='Connect'
                                                     onPress={this.connectDevice.bind(this, device)} />
-                                            }                                        
+                                            }
                                         </View>
                                     )
-                                }) 
+                                })
                             ) : null
-                        }                    
+                        }
                     </View>
-                    
+
                     <View style={styles.dataList}>
                         {
-                            this.state.dataFromDevice.length > 0 && <Text 
+                            this.state.dataFromDevice.length > 0 && <Text
                                 style={styles.dataListHeading}>Received data:</Text>
-                        }                    
-                        {  this.state.dataFromDevice ? (                            
+                        }
+                        {  this.state.dataFromDevice ? (
                             this.state.dataFromDevice.map((data, i) => {
-                                    return (                                    
+                                    return (
                                         <View key={`id_${i}`} style={{marginTop: 5}}>
                                             <Text style={{color: "#000", fontSize: 16}}>{data}</Text>
-                                        </View>    
+                                        </View>
                                     )
-                                }) 
-                            )  : null                        
+                                })
+                            )  : null
                         }
                     </View>
                 </ScrollView>
-                
+
                 {
                     this.state.discovering
                         ? ( <View style={styles.activityContainer}>
@@ -392,9 +390,9 @@ class BluetoothConnection extends Component {
                                 title='Cancel Discovery'
                                 onPress={this.cancelDiscovery} />
                         </View> ) : null
-                }               
-                
-                
+                }
+
+
                 <View style={styles.buttonBottom} >
                     {
                         !this.state.connected && !this.state.device ? (
@@ -402,16 +400,16 @@ class BluetoothConnection extends Component {
                                 title={'Discover'}
                                 onPress={this.startDiscovery} />
                         ) : null
-                    }  
-                    
-                    
+                    }
+
+
                     {
                         this.state.measureResults ? (
                             <View>
                                 {
                                     this.state.signIn ? (
                                         <GoogleSigninButton
-                                            style={{width: '100%', height: 48}} 
+                                            style={{width: '100%', height: 48}}
                                             value="Sign in"
                                             size={GoogleSigninButton.Size.Icon}
                                             color={GoogleSigninButton.Color.Dark}
@@ -421,7 +419,7 @@ class BluetoothConnection extends Component {
                                         onPress={this.sendResults}
                                     />
                                 }
-                            </View>                            
+                            </View>
                         ) : <View>
                             {
                                 this.state.deviceReady && !this.state.deviceOn ? (
@@ -439,12 +437,12 @@ class BluetoothConnection extends Component {
                                     />
                                 ) : null
                             }
-                        </View>                            
-                    }                       
+                        </View>
+                    }
                 </View>
             </View>
         )
-        
+
     }
 }
 
@@ -466,53 +464,53 @@ const styles = StyleSheet.create({
        paddingBottom: 60
    },
    buttonBottom: {
-       position: 'absolute', 
-       bottom: 10, 
-       left: 10, 
+       position: 'absolute',
+       bottom: 10,
+       left: 10,
        right: 10
    },
    activityContainer: {
-       flex: 1, 
-       alignItems: 'center', 
+       flex: 1,
+       alignItems: 'center',
        justifyContent: 'center',
        ...StyleSheet.absoluteFillObject
-       
+
    },
    activityIcon: {
        marginBottom: 15
    },
    devicesListItem: {
-       justifyContent: 'space-between', 
-       flexDirection: 'row', 
-       alignItems: 'center', 
-       paddingHorizontal: 15, 
+       justifyContent: 'space-between',
+       flexDirection: 'row',
+       alignItems: 'center',
+       paddingHorizontal: 15,
        marginVertical: 15
    },
    devicesName: {
-       fontWeight: 'bold', 
+       fontWeight: 'bold',
        color: '#000'
    },
    devicesId: {
        color:'#000'
    },
    devicesListEmpty: {
-       textAlign: 'center', 
-       color: '#000', 
+       textAlign: 'center',
+       color: '#000',
        fontSize: 16
    },
    devicesMsg: {
        padding: 20
    },
    dataList: {
-       marginTop: 20, 
+       marginTop: 20,
        paddingHorizontal: 15
    },
    dataListHeading: {
-       fontWeight: 'bold', 
-       color: '#4F8EF7', 
+       fontWeight: 'bold',
+       color: '#4F8EF7',
        fontSize: 16
-   } 
-   
+   }
+
 });
 
 export default connect(mapStateToProps)(BluetoothConnection);

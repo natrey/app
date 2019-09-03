@@ -3,27 +3,24 @@ import { Button, View, Text, StyleSheet } from 'react-native';
 import HeaderButton from '../Components/HeaderButton';
 import Geolocation from '../Components/Geolocation';
 
-
-
 class Home extends Component {
-    
     render() {
         const { navigate } = this.props.navigation;
-        
+
         return (
             <View style={styles.container}>
-                
                 <Geolocation />
-                
+
                 <HeaderButton
                     onPress={() => navigate('DrawerOpen')}
                 />
+
                 <View style={styles.buttonBottom}>
-                    <Button 
+                    <Button
                         title="Go!"
-                        onPress={() => navigate('DeviceSearch')}
+                        onPress={() => navigate('WifiDeviceSearch')}
                     />
-                </View>                
+                </View>
             </View>
         )
     }
@@ -34,7 +31,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#FFF',
     },
-    
+
     mainContent: {
         margin: 10,
         alignItems: 'center'

@@ -6,8 +6,12 @@
 		"start": "node node_modules/react-native/local-cli/cli.js start",
 		"test": "jest",
 		"android": "node node_modules/react-native/local-cli/cli.js run-android",
-		"bundle": "react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res/",
-		"assemble": "cd android && gradlew assembleDebug --console plain"
+		"bundle": "node node_modules/react-native/local-cli/cli.js bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res/",
+		"assemble": "cd android && gradlew assembleDebug --console plain",
+		"link": "node node_modules/react-native/local-cli/cli.js link",
+		"clean": "cd android && gradlew clean",
+		"adb": "C:\\Users\\natan\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb reverse tcp:8081 tcp:8081",
+		"adb-list": "C:\\Users\\natan\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb devices"
 	},
 	"dependencies": {
 		"@remobile/react-native-toast": "^1.0.7",
@@ -15,6 +19,7 @@
 		"prop-types": "^15.6.0",
 		"react": "16.0.0-beta.5",
 		"react-native": "0.49.3",
+		"react-native-android-wifi": "0.0.39",
 		"react-native-bluetooth-serial": "^1.0.0-rc1",
 		"react-native-google-signin": "^0.12.0",
 		"react-native-maps": "^0.17.0",

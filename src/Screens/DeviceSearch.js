@@ -1,22 +1,18 @@
 import React, { Component } from 'react';
-import {    
-    StyleSheet,
-    Text,
-    View
-} from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import BluetoothConnection from '../Components/BluetoothConnection';
 import DeviceSearchModal from '../Components/DeviceSearchModal';
 
 export default class DeviceSearch extends Component {
-    
-    render() {               
+
+    render() {
         return(
-            <View style={styles.container}>                               
-                <BluetoothConnection /> 
+            <View style={styles.container}>
+                <BluetoothConnection />
                 <DeviceSearchModal />
             </View>
-        );        
-    }    
+        );
+    }
 }
 
 const styles = StyleSheet.create({
